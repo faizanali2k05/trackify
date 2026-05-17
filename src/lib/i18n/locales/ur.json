@@ -1,0 +1,43 @@
+{
+  "app": { "name": "سپینڈیفائی", "tagline": "آپ کی مالی زندگی، ذہانت سے ڈیزائن کی گئی۔" },
+  "tabs": { "dashboard": "ہوم", "budgets": "بجٹ", "expenses": "اخراجات", "copilot": "کاپائلٹ", "settings": "ترتیبات" },
+  "dashboard": {
+    "greeting_morning": "صبح بخیر", "greeting_afternoon": "دوپہر بخیر", "greeting_evening": "شام بخیر",
+    "balance_label": "اس مہینے", "spent": "خرچ شدہ", "remaining": "باقی",
+    "ai_insight": "اے آئی بصیرت", "insight_placeholder": "اس ہفتے آپ کا خرچ معمول سے 12% کم ہے۔",
+    "quick_add": "فوری اخراجات شامل کریں", "recent": "حالیہ سرگرمی", "see_all": "سب دیکھیں"
+  },
+  "budgets": {
+    "title": "بجٹ اسپیسز", "subtitle": "آپ کی طرز زندگی کے مطابق اسپیسز۔",
+    "new_budget": "نیا بجٹ", "empty_title": "ابھی کوئی بجٹ نہیں",
+    "empty_subtitle": "ذہانت سے ٹریک شروع کرنے کے لیے پہلا اسپیس بنائیں۔",
+    "types": { "monthly": "ماہانہ", "travel": "سفر", "business": "کاروبار", "event": "تقریب", "family": "خاندان" }
+  },
+  "expenses": {
+    "title": "اخراجات", "search": "اخراجات تلاش کریں",
+    "filter_all": "سب", "filter_fixed": "مقررہ", "filter_variable": "متغیر",
+    "empty_title": "سب ٹھیک ہے", "empty_subtitle": "کوئی اخراجات نہیں۔ ایک شامل کریں یا رسید اسکین کریں۔",
+    "today": "آج", "yesterday": "کل", "this_week": "اس ہفتے", "earlier": "اس سے پہلے"
+  },
+  "copilot": {
+    "title": "Spendify AI", "subtitle": "آپ کے ڈیٹا پر مبنی ہم کلام مددگار۔",
+    "placeholder": "اپنے پیسوں کے بارے میں کچھ بھی پوچھیں…",
+    "suggestions": {
+      "title": "پوچھنے کی کوشش کریں",
+      "s1": "اس مہینے میں نے کہاں زیادہ خرچ کیا؟", "s2": "اگلے مہینے کے گروسری کا اندازہ لگائیں",
+      "s3": "گزشتہ 30 دن کا خلاصہ", "s4": "اگلے مہینے 200$ کیسے بچائیں؟"
+    }, "send": "بھیجیں"
+  },
+  "settings": {
+    "title": "ترتیبات", "appearance": "ظاہری شکل", "theme": "تھیم",
+    "theme_light": "روشن", "theme_dark": "گہرا", "theme_amoled": "AMOLED", "theme_system": "سسٹم",
+    "language": "زبان", "currency": "کرنسی", "account": "اکاؤنٹ", "subscription": "سبسکرپشن",
+    "plan_free": "مفت", "plan_pro": "Pro", "plan_ultra": "Ultra",
+    "support": "سپورٹ", "about": "بارے میں", "version": "ورژن"
+  },
+  "onboarding": {
+    "welcome_title": "Spendify میں خوش آمدید", "welcome_subtitle": "اپنے پیسوں کو سمجھنے کا ایک پُرسکون اور ذہین طریقہ۔",
+    "cta": "شروع کریں", "skip": "چھوڑیں"
+  },
+  "common": { "cancel": "منسوخ", "save": "محفوظ", "delete": "حذف", "continue": "جاری رکھیں", "loading": "لوڈ ہو رہا ہے…" }
+}

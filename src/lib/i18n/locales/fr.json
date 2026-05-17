@@ -1,0 +1,43 @@
+{
+  "app": { "name": "Spendify", "tagline": "Votre vie financière, intelligemment conçue." },
+  "tabs": { "dashboard": "Accueil", "budgets": "Budgets", "expenses": "Dépenses", "copilot": "Copilote", "settings": "Réglages" },
+  "dashboard": {
+    "greeting_morning": "Bonjour", "greeting_afternoon": "Bon après-midi", "greeting_evening": "Bonsoir",
+    "balance_label": "Ce mois-ci", "spent": "Dépensé", "remaining": "Restant",
+    "ai_insight": "Aperçu IA", "insight_placeholder": "Vous dépensez 12 % de moins que d'habitude cette semaine.",
+    "quick_add": "Ajout rapide", "recent": "Activité récente", "see_all": "Tout voir"
+  },
+  "budgets": {
+    "title": "Espaces budget", "subtitle": "Des espaces conçus pour votre vie réelle.",
+    "new_budget": "Nouveau budget", "empty_title": "Aucun budget pour l'instant",
+    "empty_subtitle": "Créez votre premier espace pour commencer en intelligence.",
+    "types": { "monthly": "Mensuel", "travel": "Voyage", "business": "Pro", "event": "Événement", "family": "Famille" }
+  },
+  "expenses": {
+    "title": "Dépenses", "search": "Rechercher",
+    "filter_all": "Toutes", "filter_fixed": "Fixes", "filter_variable": "Variables",
+    "empty_title": "Tout est en ordre", "empty_subtitle": "Aucune dépense. Ajoutez-en une ou scannez un reçu.",
+    "today": "Aujourd'hui", "yesterday": "Hier", "this_week": "Cette semaine", "earlier": "Plus tôt"
+  },
+  "copilot": {
+    "title": "Spendify AI", "subtitle": "Conversationnel, basé sur vos données.",
+    "placeholder": "Posez n'importe quelle question sur votre argent…",
+    "suggestions": {
+      "title": "Essayez de demander",
+      "s1": "Où ai-je trop dépensé ce mois-ci ?", "s2": "Prévois mes courses du mois prochain",
+      "s3": "Résume mes 30 derniers jours", "s4": "Comment économiser 200 $ le mois prochain ?"
+    }, "send": "Envoyer"
+  },
+  "settings": {
+    "title": "Réglages", "appearance": "Apparence", "theme": "Thème",
+    "theme_light": "Clair", "theme_dark": "Sombre", "theme_amoled": "AMOLED", "theme_system": "Système",
+    "language": "Langue", "currency": "Devise", "account": "Compte", "subscription": "Abonnement",
+    "plan_free": "Gratuit", "plan_pro": "Pro", "plan_ultra": "Ultra",
+    "support": "Assistance", "about": "À propos", "version": "Version"
+  },
+  "onboarding": {
+    "welcome_title": "Bienvenue sur Spendify", "welcome_subtitle": "Une façon plus calme et intelligente de comprendre votre argent.",
+    "cta": "Commencer", "skip": "Passer"
+  },
+  "common": { "cancel": "Annuler", "save": "Enregistrer", "delete": "Supprimer", "continue": "Continuer", "loading": "Chargement…" }
+}

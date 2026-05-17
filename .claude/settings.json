@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx expo *)",
+      "Bash(npx tsc *)",
+      "Bash(node -e \"const pkg=require\\('./node_modules/react-native-gesture-handler/package.json'\\); console.log\\('types:',pkg.types||pkg.typings\\); console.log\\('main:',pkg.main\\); console.log\\('version:',pkg.version\\);\")",
+      "Bash(npx expo-doctor *)"
+    ]
+  }
+}

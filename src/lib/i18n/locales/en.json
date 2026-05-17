@@ -1,0 +1,98 @@
+{
+  "app": {
+    "name": "Spendify",
+    "tagline": "Your financial life, intelligently designed."
+  },
+  "tabs": {
+    "dashboard": "Home",
+    "budgets": "Budgets",
+    "expenses": "Expenses",
+    "copilot": "Copilot",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "greeting_morning": "Good morning",
+    "greeting_afternoon": "Good afternoon",
+    "greeting_evening": "Good evening",
+    "balance_label": "This month",
+    "spent": "Spent",
+    "remaining": "Remaining",
+    "ai_insight": "AI Insight",
+    "insight_placeholder": "You're 12% under your usual spending this week. Nicely balanced.",
+    "quick_add": "Quick add expense",
+    "recent": "Recent activity",
+    "see_all": "See all"
+  },
+  "budgets": {
+    "title": "Budget spaces",
+    "subtitle": "Spaces tuned to how you actually live.",
+    "new_budget": "New budget",
+    "empty_title": "No budgets yet",
+    "empty_subtitle": "Create your first space to start tracking with intelligence.",
+    "types": {
+      "monthly": "Monthly",
+      "travel": "Travel",
+      "business": "Business",
+      "event": "Event",
+      "family": "Family"
+    }
+  },
+  "expenses": {
+    "title": "Expenses",
+    "search": "Search expenses",
+    "filter_all": "All",
+    "filter_fixed": "Fixed",
+    "filter_variable": "Variable",
+    "empty_title": "All clear",
+    "empty_subtitle": "No expenses logged. Add one or scan a receipt.",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "this_week": "This week",
+    "earlier": "Earlier"
+  },
+  "copilot": {
+    "title": "Spendify AI",
+    "subtitle": "Conversational, grounded in your data.",
+    "placeholder": "Ask anything about your money…",
+    "suggestions": {
+      "title": "Try asking",
+      "s1": "Where did I overspend this month?",
+      "s2": "Forecast my next month's groceries",
+      "s3": "Summarize my last 30 days",
+      "s4": "How can I save $200 next month?"
+    },
+    "send": "Send"
+  },
+  "settings": {
+    "title": "Settings",
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_amoled": "AMOLED",
+    "theme_system": "System",
+    "language": "Language",
+    "currency": "Currency",
+    "account": "Account",
+    "subscription": "Subscription",
+    "plan_free": "Free",
+    "plan_pro": "Pro",
+    "plan_ultra": "Ultra",
+    "support": "Support",
+    "about": "About",
+    "version": "Version"
+  },
+  "onboarding": {
+    "welcome_title": "Welcome to Spendify",
+    "welcome_subtitle": "A calmer, smarter way to understand your money.",
+    "cta": "Get started",
+    "skip": "Skip"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "continue": "Continue",
+    "loading": "Loading…"
+  }
+}

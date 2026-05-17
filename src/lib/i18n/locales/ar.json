@@ -1,0 +1,43 @@
+{
+  "app": { "name": "سبيندفاي", "tagline": "حياتك المالية، بتصميم ذكي." },
+  "tabs": { "dashboard": "الرئيسية", "budgets": "الميزانيات", "expenses": "المصاريف", "copilot": "المساعد", "settings": "الإعدادات" },
+  "dashboard": {
+    "greeting_morning": "صباح الخير", "greeting_afternoon": "مساء الخير", "greeting_evening": "مساء الخير",
+    "balance_label": "هذا الشهر", "spent": "المُنفَق", "remaining": "المتبقي",
+    "ai_insight": "رؤية الذكاء", "insight_placeholder": "أنت أقل بنسبة 12% من معدل إنفاقك المعتاد هذا الأسبوع.",
+    "quick_add": "إضافة مصروف سريع", "recent": "النشاط الأخير", "see_all": "عرض الكل"
+  },
+  "budgets": {
+    "title": "مساحات الميزانية", "subtitle": "مساحات مصممة حسب حياتك.",
+    "new_budget": "ميزانية جديدة", "empty_title": "لا توجد ميزانيات بعد",
+    "empty_subtitle": "أنشئ أول مساحة لتتبع نفقاتك بذكاء.",
+    "types": { "monthly": "شهرية", "travel": "سفر", "business": "أعمال", "event": "مناسبة", "family": "عائلة" }
+  },
+  "expenses": {
+    "title": "المصاريف", "search": "البحث في المصاريف",
+    "filter_all": "الكل", "filter_fixed": "ثابتة", "filter_variable": "متغيرة",
+    "empty_title": "كل شيء بخير", "empty_subtitle": "لا توجد مصاريف. أضف واحدة أو امسح إيصالاً.",
+    "today": "اليوم", "yesterday": "أمس", "this_week": "هذا الأسبوع", "earlier": "سابقاً"
+  },
+  "copilot": {
+    "title": "Spendify AI", "subtitle": "محادثة ذكية مبنية على بياناتك.",
+    "placeholder": "اسأل أي شيء عن أموالك…",
+    "suggestions": {
+      "title": "جرّب أن تسأل",
+      "s1": "أين أنفقت أكثر من اللازم هذا الشهر؟", "s2": "توقّع مصاريف البقالة الشهر القادم",
+      "s3": "لخّص آخر 30 يوماً", "s4": "كيف أوفر 200$ الشهر القادم؟"
+    }, "send": "إرسال"
+  },
+  "settings": {
+    "title": "الإعدادات", "appearance": "المظهر", "theme": "السمة",
+    "theme_light": "فاتح", "theme_dark": "داكن", "theme_amoled": "AMOLED", "theme_system": "النظام",
+    "language": "اللغة", "currency": "العملة", "account": "الحساب", "subscription": "الاشتراك",
+    "plan_free": "مجاني", "plan_pro": "Pro", "plan_ultra": "Ultra",
+    "support": "الدعم", "about": "حول", "version": "الإصدار"
+  },
+  "onboarding": {
+    "welcome_title": "مرحباً بك في Spendify", "welcome_subtitle": "طريقة أهدأ وأذكى لفهم أموالك.",
+    "cta": "ابدأ الآن", "skip": "تخطّي"
+  },
+  "common": { "cancel": "إلغاء", "save": "حفظ", "delete": "حذف", "continue": "متابعة", "loading": "جارٍ التحميل…" }
+}

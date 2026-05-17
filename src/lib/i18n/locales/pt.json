@@ -1,0 +1,43 @@
+{
+  "app": { "name": "Spendify", "tagline": "Sua vida financeira, projetada com inteligência." },
+  "tabs": { "dashboard": "Início", "budgets": "Orçamentos", "expenses": "Despesas", "copilot": "Copiloto", "settings": "Ajustes" },
+  "dashboard": {
+    "greeting_morning": "Bom dia", "greeting_afternoon": "Boa tarde", "greeting_evening": "Boa noite",
+    "balance_label": "Este mês", "spent": "Gasto", "remaining": "Restante",
+    "ai_insight": "Insight AI", "insight_placeholder": "Você está 12% abaixo do seu gasto habitual nesta semana.",
+    "quick_add": "Adicionar despesa rápida", "recent": "Atividade recente", "see_all": "Ver tudo"
+  },
+  "budgets": {
+    "title": "Espaços de orçamento", "subtitle": "Espaços feitos para a sua rotina real.",
+    "new_budget": "Novo orçamento", "empty_title": "Sem orçamentos ainda",
+    "empty_subtitle": "Crie seu primeiro espaço para começar com inteligência.",
+    "types": { "monthly": "Mensal", "travel": "Viagem", "business": "Negócios", "event": "Evento", "family": "Família" }
+  },
+  "expenses": {
+    "title": "Despesas", "search": "Buscar despesas",
+    "filter_all": "Todas", "filter_fixed": "Fixas", "filter_variable": "Variáveis",
+    "empty_title": "Tudo certo", "empty_subtitle": "Sem despesas registradas. Adicione uma ou escaneie um recibo.",
+    "today": "Hoje", "yesterday": "Ontem", "this_week": "Esta semana", "earlier": "Anterior"
+  },
+  "copilot": {
+    "title": "Spendify AI", "subtitle": "Conversacional, baseado nos seus dados.",
+    "placeholder": "Pergunte qualquer coisa sobre o seu dinheiro…",
+    "suggestions": {
+      "title": "Experimente perguntar",
+      "s1": "Onde gastei demais este mês?", "s2": "Preveja meu mercado do próximo mês",
+      "s3": "Resuma os últimos 30 dias", "s4": "Como economizar $200 no próximo mês?"
+    }, "send": "Enviar"
+  },
+  "settings": {
+    "title": "Ajustes", "appearance": "Aparência", "theme": "Tema",
+    "theme_light": "Claro", "theme_dark": "Escuro", "theme_amoled": "AMOLED", "theme_system": "Sistema",
+    "language": "Idioma", "currency": "Moeda", "account": "Conta", "subscription": "Assinatura",
+    "plan_free": "Grátis", "plan_pro": "Pro", "plan_ultra": "Ultra",
+    "support": "Suporte", "about": "Sobre", "version": "Versão"
+  },
+  "onboarding": {
+    "welcome_title": "Bem-vindo ao Spendify", "welcome_subtitle": "Uma forma mais calma e inteligente de entender seu dinheiro.",
+    "cta": "Começar", "skip": "Pular"
+  },
+  "common": { "cancel": "Cancelar", "save": "Salvar", "delete": "Excluir", "continue": "Continuar", "loading": "Carregando…" }
+}

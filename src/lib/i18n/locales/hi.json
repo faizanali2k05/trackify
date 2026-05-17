@@ -1,0 +1,43 @@
+{
+  "app": { "name": "Spendify", "tagline": "आपका वित्तीय जीवन, समझदारी से डिज़ाइन किया गया।" },
+  "tabs": { "dashboard": "होम", "budgets": "बजट", "expenses": "ख़र्च", "copilot": "कोपायलट", "settings": "सेटिंग्स" },
+  "dashboard": {
+    "greeting_morning": "सुप्रभात", "greeting_afternoon": "नमस्कार", "greeting_evening": "शुभ संध्या",
+    "balance_label": "इस महीने", "spent": "ख़र्च हुआ", "remaining": "बाक़ी",
+    "ai_insight": "AI जानकारी", "insight_placeholder": "इस सप्ताह आप सामान्य से 12% कम ख़र्च कर रहे हैं।",
+    "quick_add": "त्वरित ख़र्च जोड़ें", "recent": "हाल की गतिविधि", "see_all": "सब देखें"
+  },
+  "budgets": {
+    "title": "बजट स्पेस", "subtitle": "आपकी ज़िंदगी के अनुसार बने स्पेस।",
+    "new_budget": "नया बजट", "empty_title": "अभी कोई बजट नहीं",
+    "empty_subtitle": "इंटेलिजेंट ट्रैकिंग शुरू करने के लिए पहला स्पेस बनाएँ।",
+    "types": { "monthly": "मासिक", "travel": "यात्रा", "business": "व्यवसाय", "event": "इवेंट", "family": "परिवार" }
+  },
+  "expenses": {
+    "title": "ख़र्च", "search": "ख़र्च खोजें",
+    "filter_all": "सभी", "filter_fixed": "नियत", "filter_variable": "परिवर्तनीय",
+    "empty_title": "सब साफ़", "empty_subtitle": "कोई ख़र्च दर्ज नहीं। एक जोड़ें या रसीद स्कैन करें।",
+    "today": "आज", "yesterday": "कल", "this_week": "इस सप्ताह", "earlier": "पहले"
+  },
+  "copilot": {
+    "title": "Spendify AI", "subtitle": "आपके डेटा पर आधारित संवादात्मक सहायक।",
+    "placeholder": "अपने पैसे के बारे में कुछ भी पूछें…",
+    "suggestions": {
+      "title": "ये पूछ कर देखें",
+      "s1": "इस महीने मैंने कहाँ ज़्यादा ख़र्च किया?", "s2": "अगले महीने का राशन ख़र्च अनुमान लगाएँ",
+      "s3": "पिछले 30 दिनों का सारांश", "s4": "अगले महीने $200 कैसे बचाएँ?"
+    }, "send": "भेजें"
+  },
+  "settings": {
+    "title": "सेटिंग्स", "appearance": "रूप", "theme": "थीम",
+    "theme_light": "हल्का", "theme_dark": "गहरा", "theme_amoled": "AMOLED", "theme_system": "सिस्टम",
+    "language": "भाषा", "currency": "मुद्रा", "account": "खाता", "subscription": "सदस्यता",
+    "plan_free": "मुफ़्त", "plan_pro": "Pro", "plan_ultra": "Ultra",
+    "support": "सहायता", "about": "बारे में", "version": "संस्करण"
+  },
+  "onboarding": {
+    "welcome_title": "Spendify में आपका स्वागत है", "welcome_subtitle": "अपने पैसे को समझने का शांत और स्मार्ट तरीक़ा।",
+    "cta": "शुरू करें", "skip": "छोड़ें"
+  },
+  "common": { "cancel": "रद्द", "save": "सहेजें", "delete": "हटाएँ", "continue": "जारी रखें", "loading": "लोड हो रहा है…" }
+}

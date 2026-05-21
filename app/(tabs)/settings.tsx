@@ -1,15 +1,19 @@
+import { useState } from 'react';
 import { View, ScrollView, Pressable } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {
   Sun, Moon, Smartphone, Globe, Coins, Crown, LifeBuoy, Info, ChevronRight, Zap,
+  Sparkles, Eye, EyeOff, CheckCircle2,
 } from 'lucide-react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Screen, Text, GlassCard, AuroraBackground } from '@/components/ui';
+import { Screen, Text, GlassCard, TextField, AuroraBackground } from '@/components/ui';
 import { useTheme } from '@/hooks/useTheme';
 import { useSettingsStore } from '@/store/settings';
 import { useHaptics } from '@/hooks/useHaptics';
 import { SUPPORTED_LOCALES, applyRTL, type Locale } from '@/lib/i18n';
+import { CURRENCIES } from '@/lib/constants';
+import { isAIConfigured } from '@/services/ai';
 import type { ThemeMode } from '@/lib/theme';
 import i18n from '@/lib/i18n';
 
@@ -38,9 +42,7 @@ function Row({
         <Text variant="body">{label}</Text>
       </View>
       <View className="flex-row items-center gap-2">
-        {value && (
-          <Text variant="caption" muted>{value}</Text>
-        )}
+        {value ? <Text variant="caption" muted>{value}</Text> : null}
         <ChevronRight size={16} color={colors.textSubtle} strokeWidth={2.2} />
       </View>
     </Pressable>
@@ -143,6 +145,120 @@ function LanguagePicker() {
   );
 }
 
+function CurrencyPicker() {
+  const { t } = useTranslation();
+  const { colors } = useTheme();
+  const currency = useSettingsStore((s) => s.currency);
+  const setCurrency = useSettingsStore((s) => s.setCurrency);
+  const h = useHaptics();
+
+  return (
+    <View className="px-4 py-3">
+      <Text variant="caption" muted className="mb-3 uppercase tracking-wider">
+        {t('settings.currency')}
+      </Text>
+      <View className="flex-row flex-wrap gap-2">
+        {CURRENCIES.map((c) => {
+          const active = currency === c.code;
+          return (
+            <Pressable
+              key={c.code}
+              onPress={() => { h.select(); setCurrency(c.code); }}
+              className="rounded-2xl px-3 py-2"
+              style={{
+                backgroundColor: active ? colors.text : 'transparent',
+                borderWidth: 1,
+                borderColor: active ? colors.text : colors.border,
+              }}
+            >
+              <Text
+                variant="caption"
+                style={{ color: active ? colors.bg : colors.text, fontWeight: '600' }}
+              >
+                {c.symbol} {c.code}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+function AISection() {
+  const { t } = useTranslation();
+  const { colors } = useTheme();
+  const grokApiKey = useSettingsStore((s) => s.grokApiKey);
+  const setGrokApiKey = useSettingsStore((s) => s.setGrokApiKey);
+  const [show, setShow] = useState(false);
+  const connected = isAIConfigured(grokApiKey);
+
+  return (
+    <View className="px-4 py-4">
+      <View className="flex-row items-center justify-between mb-3">
+        <View className="flex-row items-center gap-2">
+          <Sparkles size={15} color={colors.accentPink} strokeWidth={2.4} />
+          <Text variant="caption" muted className="uppercase tracking-wider">
+            {t('settings.ai_key')}
+          </Text>
+        </View>
+        {connected ? (
+          <View className="flex-row items-center gap-1">
+            <CheckCircle2 size={14} color={colors.accentEmerald} strokeWidth={2.4} />
+            <Text variant="caption" style={{ color: colors.accentEmerald, fontWeight: '600' }}>
+              {t('settings.ai_connected')}
+            </Text>
+          </View>
+        ) : (
+          <Text variant="caption" muted>{t('settings.ai_local')}</Text>
+        )}
+      </View>
+
+      <View className="flex-row items-center gap-2">
+        <View className="flex-1">
+          <TextField
+            value={grokApiKey}
+            onChangeText={setGrokApiKey}
+            placeholder="xai-..."
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry={!show}
+          />
+        </View>
+        <Pressable
+          onPress={() => setShow((s) => !s)}
+          className="h-[54px] w-12 items-center justify-center rounded-2xl border border-border"
+        >
+          {show ? (
+            <EyeOff size={18} color={colors.textMuted} strokeWidth={2.2} />
+          ) : (
+            <Eye size={18} color={colors.textMuted} strokeWidth={2.2} />
+          )}
+        </Pressable>
+      </View>
+      <Text variant="caption" muted className="mt-2 leading-5">
+        {t('settings.ai_help')}
+      </Text>
+    </View>
+  );
+}
+
+function ProfileSection() {
+  const { t } = useTranslation();
+  const userName = useSettingsStore((s) => s.userName);
+  const setUserName = useSettingsStore((s) => s.setUserName);
+  return (
+    <View className="px-4 py-4">
+      <TextField
+        label={t('settings.name')}
+        value={userName}
+        onChangeText={setUserName}
+        placeholder={t('settings.name_ph')}
+      />
+    </View>
+  );
+}
+
 export default function SettingsScreen() {
   const { t } = useTranslation();
   const { colors } = useTheme();
@@ -173,7 +289,7 @@ export default function SettingsScreen() {
                   {t(`settings.plan_${plan}`)}
                 </Text>
                 <Text variant="caption" muted className="mt-0.5">
-                  {plan === 'free' ? 'Upgrade for unlimited AI & OCR' : 'Thanks for supporting Spendify.'}
+                  {plan === 'free' ? t('settings.upgrade_hint') : t('settings.thanks')}
                 </Text>
               </View>
               <ChevronRight size={18} color={colors.textMuted} strokeWidth={2.2} />
@@ -181,8 +297,28 @@ export default function SettingsScreen() {
           </GlassCard>
         </Animated.View>
 
-        {/* Appearance group */}
-        <Animated.View entering={FadeInUp.delay(120).duration(450)} className="mt-5">
+        {/* Spendify AI */}
+        <Animated.View entering={FadeInUp.delay(110).duration(450)} className="mt-5">
+          <Text variant="caption" muted className="mb-2 ml-2 uppercase tracking-wider">
+            {t('copilot.title')}
+          </Text>
+          <View className="rounded-3xl bg-surface border border-border overflow-hidden">
+            <AISection />
+          </View>
+        </Animated.View>
+
+        {/* Profile */}
+        <Animated.View entering={FadeInUp.delay(150).duration(450)} className="mt-5">
+          <Text variant="caption" muted className="mb-2 ml-2 uppercase tracking-wider">
+            {t('settings.profile')}
+          </Text>
+          <View className="rounded-3xl bg-surface border border-border overflow-hidden">
+            <ProfileSection />
+          </View>
+        </Animated.View>
+
+        {/* Preferences */}
+        <Animated.View entering={FadeInUp.delay(190).duration(450)} className="mt-5">
           <Text variant="caption" muted className="mb-2 ml-2 uppercase tracking-wider">
             {t('settings.appearance')}
           </Text>
@@ -190,11 +326,13 @@ export default function SettingsScreen() {
             <ThemePicker />
             <View className="h-px bg-border" />
             <LanguagePicker />
+            <View className="h-px bg-border" />
+            <CurrencyPicker />
           </View>
         </Animated.View>
 
         {/* Account / support group */}
-        <Animated.View entering={FadeInUp.delay(180).duration(450)} className="mt-5">
+        <Animated.View entering={FadeInUp.delay(230).duration(450)} className="mt-5">
           <Text variant="caption" muted className="mb-2 ml-2 uppercase tracking-wider">
             {t('settings.account')}
           </Text>

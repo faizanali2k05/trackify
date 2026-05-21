@@ -73,6 +73,11 @@ export default function RootLayout() {
             >
               <Stack.Screen name="onboarding" />
               <Stack.Screen name="(tabs)" />
+              <Stack.Screen name="analytics" />
+              <Stack.Screen name="expense/new" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="expense/[id]" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="budget/new" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="budget/[id]" options={{ presentation: 'modal' }} />
             </Stack>
           </ThemedRoot>
         </QueryClientProvider>

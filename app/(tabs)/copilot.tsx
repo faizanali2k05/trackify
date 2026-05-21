@@ -27,6 +27,8 @@ export default function Copilot() {
   const budgets = useBudgetsStore((s) => s.budgets);
   const locale = useSettingsStore((s) => s.locale);
   const currency = useSettingsStore((s) => s.currency);
+  const userName = useSettingsStore((s) => s.userName);
+  const grokApiKey = useSettingsStore((s) => s.grokApiKey);
 
   const [messages, setMessages] = useState<AIMessage[]>([]);
   const [draft, setDraft] = useState('');
@@ -60,6 +62,9 @@ export default function Copilot() {
           budgets,
           locale,
           currency,
+          userName,
+          apiKey: grokApiKey,
+          history: messages,
         })) {
           setMessages((prev) =>
             prev.map((m) =>
@@ -72,7 +77,7 @@ export default function Copilot() {
         setStreaming(false);
       }
     },
-    [draft, streaming, expenses, budgets, locale, currency, h],
+    [draft, streaming, expenses, budgets, locale, currency, userName, grokApiKey, messages, h],
   );
 
   const suggestions = [

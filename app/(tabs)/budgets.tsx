@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { View, ScrollView, Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Plus, Wallet, Plane, Briefcase, PartyPopper, Users } from 'lucide-react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Screen, Text, AuroraBackground } from '@/components/ui';
+import { Screen, Text, Button, AuroraBackground } from '@/components/ui';
 import { useBudgetsStore } from '@/store/budgets';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useTheme } from '@/hooks/useTheme';
@@ -28,6 +29,7 @@ const ACCENT: Record<string, 'accentViolet' | 'accentPink' | 'accentBlue' | 'acc
 
 export default function Budgets() {
   const { t } = useTranslation();
+  const router = useRouter();
   const { format } = useCurrency();
   const { colors } = useTheme();
   const h = useHaptics();
@@ -60,7 +62,10 @@ export default function Budgets() {
             </Text>
           </View>
           <Pressable
-            onPress={() => h.light()}
+            onPress={() => {
+              h.light();
+              router.push('/budget/new');
+            }}
             className="h-11 w-11 items-center justify-center rounded-2xl"
             style={{ backgroundColor: colors.text }}
           >
@@ -74,6 +79,9 @@ export default function Budgets() {
             <Text variant="body" muted className="mt-2 text-center">
               {t('budgets.empty_subtitle')}
             </Text>
+            <View className="mt-6 w-full">
+              <Button label={t('budgets.new_budget')} onPress={() => router.push('/budget/new')} />
+            </View>
           </View>
         ) : (
           <View className="mt-6 gap-3">
@@ -82,7 +90,10 @@ export default function Budgets() {
               return (
                 <Animated.View key={b.id} entering={FadeInUp.delay(i * 70).duration(450)}>
                   <Pressable
-                    onPress={() => h.select()}
+                    onPress={() => {
+                      h.select();
+                      router.push({ pathname: '/budget/[id]', params: { id: b.id } });
+                    }}
                     className="rounded-3xl border border-border bg-surface p-5"
                   >
                     <View className="flex-row items-center justify-between">

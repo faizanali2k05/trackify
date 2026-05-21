@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { zustandMMKVStorage } from '@/lib/mmkv';
+import { persistStorage } from '@/lib/storage';
 import type { Expense, UUID } from '@/types';
 
 function uid(): UUID {
@@ -52,7 +52,7 @@ export const useExpensesStore = create<ExpensesState>()(
     }),
     {
       name: 'spendify.expenses',
-      storage: createJSONStorage(() => zustandMMKVStorage),
+      storage: createJSONStorage(() => persistStorage),
     },
   ),
 );

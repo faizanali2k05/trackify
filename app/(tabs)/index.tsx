@@ -1,15 +1,20 @@
 import { useMemo } from 'react';
 import { View, ScrollView, Pressable } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 import { Plus, Sparkles, TrendingUp, ArrowUpRight } from 'lucide-react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { Screen, Text, GlassCard, AuroraBackground } from '@/components/ui';
 import { useExpensesStore } from '@/store/expenses';
 import { useBudgetsStore } from '@/store/budgets';
+import { useSettingsStore } from '@/store/settings';
 import { useCurrency } from '@/hooks/useCurrency';
 import { useTheme } from '@/hooks/useTheme';
 import { useHaptics } from '@/hooks/useHaptics';
+import { totalSpent } from '@/lib/analytics';
+import { generateInsight } from '@/services/ai';
 
 function greetingKey(): 'greeting_morning' | 'greeting_afternoon' | 'greeting_evening' {
   const h = new Date().getHours();
@@ -20,21 +25,35 @@ function greetingKey(): 'greeting_morning' | 'greeting_afternoon' | 'greeting_ev
 
 export default function Dashboard() {
   const { t } = useTranslation();
+  const router = useRouter();
   const { format } = useCurrency();
   const { colors } = useTheme();
   const h = useHaptics();
   const expenses = useExpensesStore((s) => s.expenses);
   const budgets = useBudgetsStore((s) => s.budgets);
+  const locale = useSettingsStore((s) => s.locale);
+  const currency = useSettingsStore((s) => s.currency);
+  const userName = useSettingsStore((s) => s.userName);
+  const grokApiKey = useSettingsStore((s) => s.grokApiKey);
 
   const stats = useMemo(() => {
     const totalBudget = budgets.reduce((a, b) => a + b.amount, 0);
-    const totalSpent = budgets.reduce((a, b) => a + b.spent, 0);
-    const remaining = Math.max(0, totalBudget - totalSpent);
-    const pct = totalBudget > 0 ? Math.min(1, totalSpent / totalBudget) : 0;
-    return { totalBudget, totalSpent, remaining, pct };
+    const spent = budgets.reduce((a, b) => a + b.spent, 0);
+    const remaining = Math.max(0, totalBudget - spent);
+    const pct = totalBudget > 0 ? Math.min(1, spent / totalBudget) : 0;
+    return { totalBudget, totalSpent: spent, remaining, pct };
   }, [budgets]);
 
   const recent = expenses.slice(0, 5);
+
+  // Live, data-grounded insight. Re-runs only when spending materially changes.
+  const insightKey = Math.round(totalSpent(expenses));
+  const insight = useQuery({
+    queryKey: ['ai-insight', expenses.length, insightKey, budgets.length, Boolean(grokApiKey)],
+    queryFn: () =>
+      generateInsight({ expenses, budgets, locale, currency, userName, apiKey: grokApiKey }),
+    staleTime: 1000 * 60 * 10,
+  });
 
   return (
     <Screen padded={false}>
@@ -89,7 +108,9 @@ export default function Dashboard() {
               </Text>
             </View>
             <Text variant="body" className="mt-2 leading-6">
-              {t('dashboard.insight_placeholder')}
+              {insight.isLoading
+                ? t('dashboard.insight_loading')
+                : insight.data ?? t('dashboard.insight_placeholder')}
             </Text>
           </GlassCard>
         </Animated.View>
@@ -100,7 +121,10 @@ export default function Dashboard() {
           className="mt-4 flex-row gap-3"
         >
           <Pressable
-            onPress={() => h.light()}
+            onPress={() => {
+              h.light();
+              router.push('/expense/new');
+            }}
             className="flex-1 rounded-3xl border border-border bg-surface p-4"
           >
             <View
@@ -113,7 +137,10 @@ export default function Dashboard() {
           </Pressable>
 
           <Pressable
-            onPress={() => h.light()}
+            onPress={() => {
+              h.light();
+              router.push('/analytics');
+            }}
             className="flex-1 rounded-3xl border border-border bg-surface p-4"
           >
             <View
@@ -122,7 +149,7 @@ export default function Dashboard() {
             >
               <TrendingUp size={20} color={colors.accentEmerald} strokeWidth={2.4} />
             </View>
-            <Text variant="body" className="mt-3 font-display">Analytics</Text>
+            <Text variant="body" className="mt-3 font-display">{t('analytics.title')}</Text>
           </Pressable>
         </Animated.View>
 
@@ -130,7 +157,12 @@ export default function Dashboard() {
         <Animated.View entering={FadeInDown.delay(320).duration(500)} className="mt-8">
           <View className="flex-row items-center justify-between mb-3">
             <Text variant="heading">{t('dashboard.recent')}</Text>
-            <Pressable onPress={() => h.select()}>
+            <Pressable
+              onPress={() => {
+                h.select();
+                router.push('/(tabs)/expenses');
+              }}
+            >
               <View className="flex-row items-center gap-1">
                 <Text variant="caption" muted>{t('dashboard.see_all')}</Text>
                 <ArrowUpRight size={14} color={colors.textMuted} strokeWidth={2.2} />
@@ -138,10 +170,25 @@ export default function Dashboard() {
             </Pressable>
           </View>
 
+          {recent.length === 0 ? (
+            <Pressable
+              onPress={() => {
+                h.light();
+                router.push('/expense/new');
+              }}
+              className="rounded-3xl bg-surface border border-border p-6 items-center"
+            >
+              <Text variant="body" muted>{t('dashboard.recent_empty')}</Text>
+            </Pressable>
+          ) : (
           <View className="rounded-3xl bg-surface border border-border overflow-hidden">
             {recent.map((e, i) => (
-              <View
+              <Pressable
                 key={e.id}
+                onPress={() => {
+                  h.select();
+                  router.push({ pathname: '/expense/[id]', params: { id: e.id } });
+                }}
                 className={`flex-row items-center justify-between px-4 py-4 ${i !== recent.length - 1 ? 'border-b border-border' : ''}`}
               >
                 <View className="flex-row items-center gap-3 flex-1">
@@ -161,9 +208,10 @@ export default function Dashboard() {
                 <Text variant="body" className="font-display">
                   −{format(e.amount)}
                 </Text>
-              </View>
+              </Pressable>
             ))}
           </View>
+          )}
         </Animated.View>
       </ScrollView>
     </Screen>

@@ -1,5 +1,5 @@
 {
-  "app": { "name": "Spendify", "tagline": "आपका वित्तीय जीवन, समझदारी से डिज़ाइन किया गया।" },
+  "app": { "name": "Trackify", "tagline": "आपका वित्तीय जीवन, समझदारी से डिज़ाइन किया गया।" },
   "tabs": { "dashboard": "होम", "budgets": "बजट", "expenses": "ख़र्च", "copilot": "कोपायलट", "settings": "सेटिंग्स" },
   "dashboard": {
     "greeting_morning": "सुप्रभात", "greeting_afternoon": "नमस्कार", "greeting_evening": "शुभ संध्या",
@@ -20,7 +20,7 @@
     "today": "आज", "yesterday": "कल", "this_week": "इस सप्ताह", "earlier": "पहले"
   },
   "copilot": {
-    "title": "Spendify AI", "subtitle": "आपके डेटा पर आधारित संवादात्मक सहायक।",
+    "title": "Trackify AI", "subtitle": "आपके डेटा पर आधारित संवादात्मक सहायक।",
     "placeholder": "अपने पैसे के बारे में कुछ भी पूछें…",
     "suggestions": {
       "title": "ये पूछ कर देखें",
@@ -36,7 +36,7 @@
     "support": "सहायता", "about": "बारे में", "version": "संस्करण"
   },
   "onboarding": {
-    "welcome_title": "Spendify में आपका स्वागत है", "welcome_subtitle": "अपने पैसे को समझने का शांत और स्मार्ट तरीक़ा।",
+    "welcome_title": "Trackify में आपका स्वागत है", "welcome_subtitle": "अपने पैसे को समझने का शांत और स्मार्ट तरीक़ा।",
     "cta": "शुरू करें", "skip": "छोड़ें"
   },
   "common": { "cancel": "रद्द", "save": "सहेजें", "delete": "हटाएँ", "continue": "जारी रखें", "loading": "लोड हो रहा है…" }

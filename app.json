@@ -1,34 +1,49 @@
 {
   "expo": {
-    "name": "Spendify",
-    "slug": "spendify",
+    "name": "Trackify",
+    "slug": "trackify",
     "version": "0.1.0",
     "orientation": "portrait",
-    "scheme": "spendify",
+    "scheme": "trackify",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "resizeMode": "contain",
-      "backgroundColor": "#0A0A0F"
+    "icon": "./assets/ios/AppIcon-1024.png",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.spendify.app"
+      "bundleIdentifier": "com.trackify.app"
     },
     "android": {
+      "package": "com.trackify.app",
       "adaptiveIcon": {
-        "backgroundColor": "#0A0A0F"
-      },
-      "package": "com.spendify.app"
+        "foregroundImage": "./assets/brand/icon-white.png",
+        "backgroundColor": "#06B58F"
+      }
     },
     "web": {
-      "bundler": "metro"
+      "bundler": "metro",
+      "favicon": "./assets/web/favicon/favicon-512.png"
     },
     "plugins": [
       "expo-router",
       "expo-localization",
       "expo-font",
-      "expo-asset"
+      "expo-asset",
+      "expo-updates",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/brand/icon-white.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#0A0C0B"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

@@ -1,20 +1,25 @@
 /**
- * Spendify AI — powered by Grok (xAI).
+ * Trackify AI — conversational finance copilot.
  *
- * Grok exposes an OpenAI-compatible chat API at https://api.x.ai/v1. We send a
- * compact, grounded summary of the user's budgets/expenses so answers reflect
- * real data instead of hallucinated numbers.
+ * There are three layers, tried in order, so the app is never "broken":
  *
- * Key resolution order (first non-empty wins):
- *   1. key passed in from the in-app Settings field (stored on-device)
- *   2. EXPO_PUBLIC_GROK_API_KEY from the environment / .env
+ *   1. Backend proxy (RECOMMENDED for production): if EXPO_PUBLIC_API_URL is set,
+ *      we POST to `${API_URL}/api/ai/chat`. The server (see /server) holds the
+ *      real AI provider key — nothing secret ships in the app. Deploy it free on
+ *      Render or Heroku.
+ *   2. Direct provider call (Grok / xAI, OpenAI-compatible at api.x.ai/v1) using a
+ *      key from the in-app Settings field or EXPO_PUBLIC_GROK_API_KEY. Handy for
+ *      local development.
+ *   3. Deterministic on-device summaries computed from the same data — used when
+ *      there is no backend and no key, or when the network is unavailable.
  *
- * With no key, everything still works: we fall back to deterministic local
- * summaries computed from the same data. The app is never "broken" without AI.
+ * Either way we send a compact, grounded summary of the user's budgets/expenses
+ * so answers reflect real numbers instead of hallucinations.
  *
  * NOTE: any EXPO_PUBLIC_ value is bundled into the client and is therefore
- * visible to anyone with the app. For a production launch, proxy these calls
- * through a small server (e.g. a Supabase Edge Function) and keep the key there.
+ * visible to anyone with the app. Only put PUBLIC, non-secret values there (the
+ * Supabase anon key and the backend URL are fine). Keep real AI keys on the
+ * backend (layer 1).
  */
 import type { AIMessage, Budget, Expense } from '@/types';
 import { uid } from '@/lib/id';
@@ -45,18 +50,59 @@ export type AIStreamChunk = { delta: string; done: boolean };
 const GROK_BASE_URL = process.env.EXPO_PUBLIC_GROK_BASE_URL ?? 'https://api.x.ai/v1';
 const GROK_MODEL = process.env.EXPO_PUBLIC_GROK_MODEL ?? 'grok-3';
 
+/** Optional self-hosted backend (see /server). When set, AI runs through it and
+ *  no provider key needs to live on the device. */
+const API_URL = process.env.EXPO_PUBLIC_API_URL?.replace(/\/$/, '') || undefined;
+
+/** True when a backend proxy is configured — AI works with no on-device key. */
+export function hasBackend(): boolean {
+  return Boolean(API_URL);
+}
+
+/** Call the Trackify backend proxy. Throws on any non-2xx so callers can fall back. */
+async function callBackend(
+  messages: ChatMessage[],
+  opts: { maxTokens?: number; temperature?: number },
+): Promise<string> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 30_000);
+  try {
+    const res = await fetch(`${API_URL}/api/ai/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages,
+        max_tokens: opts.maxTokens ?? 600,
+        temperature: opts.temperature ?? 0.4,
+      }),
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      const detail = await res.text().catch(() => '');
+      throw new Error(`Backend ${res.status}: ${detail || res.statusText}`);
+    }
+    const data = await res.json();
+    const content: string | undefined = data?.content ?? data?.choices?.[0]?.message?.content;
+    if (!content) throw new Error('Backend returned an empty response.');
+    return content.trim();
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 function resolveKey(ctx: AIContext): string | undefined {
   const fromSettings = ctx.apiKey?.trim();
   const fromEnv = process.env.EXPO_PUBLIC_GROK_API_KEY?.trim();
   return fromSettings || fromEnv || undefined;
 }
 
-/** Whether a key is available from either source. Useful for UI hints. */
+/** Whether full AI is available: a backend proxy, or a key from either source. */
 export function isAIConfigured(apiKey?: string): boolean {
+  if (hasBackend()) return true;
   return Boolean((apiKey?.trim() || process.env.EXPO_PUBLIC_GROK_API_KEY?.trim()) ?? '');
 }
 
-const SYSTEM_PROMPT = `You are Spendify AI, a calm, sharp, and encouraging personal-finance copilot inside a premium budgeting app.
+const SYSTEM_PROMPT = `You are Trackify AI, a calm, sharp, and encouraging personal-finance copilot inside a premium budgeting app.
 
 Rules:
 - Ground every answer ONLY in the user's data provided in the context block. Never invent transactions or numbers.
@@ -174,9 +220,21 @@ async function* typeOut(text: string): AsyncGenerator<AIStreamChunk> {
   if (tokens.length === 0) yield { delta: '', done: true };
 }
 
+/** Run a chat completion through the best available layer (backend → Grok). */
+async function chat(
+  messages: ChatMessage[],
+  key: string | undefined,
+  opts: { maxTokens?: number; temperature?: number },
+): Promise<string> {
+  if (hasBackend()) return callBackend(messages, opts);
+  if (key) return callGrok(messages, { apiKey: key, ...opts });
+  throw new Error('No AI backend or key configured.');
+}
+
 /**
- * Stream a conversational answer. Uses Grok when a key is available, otherwise
- * a deterministic local answer — either way it is rendered as a typing stream.
+ * Stream a conversational answer. Uses the backend proxy or a Grok key when
+ * available, otherwise a deterministic local answer — either way it is rendered
+ * as a typing stream.
  */
 export async function* streamAIResponse(
   prompt: string,
@@ -184,7 +242,7 @@ export async function* streamAIResponse(
 ): AsyncGenerator<AIStreamChunk> {
   const key = resolveKey(ctx);
 
-  if (!key) {
+  if (!hasBackend() && !key) {
     yield* typeOut(localAnswer(prompt, ctx));
     return;
   }
@@ -195,18 +253,19 @@ export async function* streamAIResponse(
       role: m.role,
       content: m.content,
     }));
-    text = await callGrok(
+    text = await chat(
       [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'system', content: `User financial context:\n${buildContextBlock(ctx)}` },
         ...history,
         { role: 'user', content: prompt },
       ],
-      { apiKey: key, maxTokens: 600, temperature: 0.4 },
+      key,
+      { maxTokens: 600, temperature: 0.4 },
     );
   } catch (err) {
     const note = __DEV__ ? ` (${(err as Error).message})` : '';
-    text = `${localAnswer(prompt, ctx)}\n\n(Offline mode — couldn't reach Grok${note}.)`;
+    text = `${localAnswer(prompt, ctx)}\n\n(Offline mode — couldn't reach Trackify AI${note}.)`;
   }
   yield* typeOut(text);
 }
@@ -214,9 +273,9 @@ export async function* streamAIResponse(
 /** A single short, proactive insight for the dashboard. Resolves to plain text. */
 export async function generateInsight(ctx: AIContext): Promise<string> {
   const key = resolveKey(ctx);
-  if (!key) return localInsight(ctx);
+  if (!hasBackend() && !key) return localInsight(ctx);
   try {
-    return await callGrok(
+    return await chat(
       [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'system', content: `User financial context:\n${buildContextBlock(ctx)}` },
@@ -226,7 +285,8 @@ export async function generateInsight(ctx: AIContext): Promise<string> {
             'In ONE or TWO short sentences, give the single most useful, specific observation about my spending right now. Be encouraging but honest. No preamble, no greeting.',
         },
       ],
-      { apiKey: key, maxTokens: 120, temperature: 0.5 },
+      key,
+      { maxTokens: 120, temperature: 0.5 },
     );
   } catch {
     return localInsight(ctx);

@@ -20,7 +20,7 @@
     "today": "آج", "yesterday": "کل", "this_week": "اس ہفتے", "earlier": "اس سے پہلے"
   },
   "copilot": {
-    "title": "Spendify AI", "subtitle": "آپ کے ڈیٹا پر مبنی ہم کلام مددگار۔",
+    "title": "Trackify AI", "subtitle": "آپ کے ڈیٹا پر مبنی ہم کلام مددگار۔",
     "placeholder": "اپنے پیسوں کے بارے میں کچھ بھی پوچھیں…",
     "suggestions": {
       "title": "پوچھنے کی کوشش کریں",
@@ -36,7 +36,7 @@
     "support": "سپورٹ", "about": "بارے میں", "version": "ورژن"
   },
   "onboarding": {
-    "welcome_title": "Spendify میں خوش آمدید", "welcome_subtitle": "اپنے پیسوں کو سمجھنے کا ایک پُرسکون اور ذہین طریقہ۔",
+    "welcome_title": "Trackify میں خوش آمدید", "welcome_subtitle": "اپنے پیسوں کو سمجھنے کا ایک پُرسکون اور ذہین طریقہ۔",
     "cta": "شروع کریں", "skip": "چھوڑیں"
   },
   "common": { "cancel": "منسوخ", "save": "محفوظ", "delete": "حذف", "continue": "جاری رکھیں", "loading": "لوڈ ہو رہا ہے…" }

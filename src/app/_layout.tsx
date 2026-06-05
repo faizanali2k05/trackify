@@ -1,4 +1,4 @@
-import '../global.css';
+import '../../global.css';
 import '@/lib/i18n';
 
 import { useEffect } from 'react';
@@ -13,6 +13,7 @@ import { View } from 'react-native';
 import { queryClient } from '@/lib/query';
 import { useSettingsStore } from '@/store/settings';
 import { useTheme } from '@/hooks/useTheme';
+import { useOTAUpdates } from '@/hooks/useOTAUpdates';
 import { semanticTokens } from '@/lib/theme';
 
 function ThemedRoot({ children }: { children: React.ReactNode }) {
@@ -53,6 +54,8 @@ function OnboardingGate() {
 
 export default function RootLayout() {
   const { colorScheme } = useColorScheme();
+  // Apply over-the-air updates (no-op in Expo Go / dev).
+  useOTAUpdates();
   // Touch the scheme so Reanimated picks up the right palette on mount.
   useEffect(() => {
     void colorScheme;

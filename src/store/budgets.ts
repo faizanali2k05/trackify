@@ -79,7 +79,7 @@ export const useBudgetsStore = create<BudgetsState>()(
         })),
     }),
     {
-      name: 'spendify.budgets',
+      name: 'trackify.budgets',
       storage: createJSONStorage(() => persistStorage),
     },
   ),

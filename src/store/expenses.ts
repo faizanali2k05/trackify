@@ -51,7 +51,7 @@ export const useExpensesStore = create<ExpensesState>()(
         })),
     }),
     {
-      name: 'spendify.expenses',
+      name: 'trackify.expenses',
       storage: createJSONStorage(() => persistStorage),
     },
   ),

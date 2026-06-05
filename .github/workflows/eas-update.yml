@@ -1,0 +1,47 @@
+name: EAS Update (OTA)
+
+# Pushes a new over-the-air JavaScript/asset bundle to every installed app the
+# moment you push to `main`. Native code changes still require a new build —
+# this only ships JS/asset updates, which covers the vast majority of changes.
+#
+# ONE-TIME SETUP:
+#   1. Create an Expo account → https://expo.dev
+#   2. Run locally once:  npx eas-cli@latest init  &&  npx eas-cli@latest update:configure
+#      (this writes extra.eas.projectId + updates.url into app.json — commit them)
+#   3. Create an access token: https://expo.dev/accounts/[you]/settings/access-tokens
+#   4. Add it to GitHub → repo Settings → Secrets and variables → Actions →
+#      New repository secret named  EXPO_TOKEN
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: eas-update-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update:
+    name: Publish OTA update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Publish update
+        run: eas update --branch production --message "${{ github.event.head_commit.message }}" --non-interactive

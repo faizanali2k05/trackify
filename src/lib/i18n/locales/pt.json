@@ -1,5 +1,5 @@
 {
-  "app": { "name": "Spendify", "tagline": "Sua vida financeira, projetada com inteligência." },
+  "app": { "name": "Trackify", "tagline": "Sua vida financeira, projetada com inteligência." },
   "tabs": { "dashboard": "Início", "budgets": "Orçamentos", "expenses": "Despesas", "copilot": "Copiloto", "settings": "Ajustes" },
   "dashboard": {
     "greeting_morning": "Bom dia", "greeting_afternoon": "Boa tarde", "greeting_evening": "Boa noite",
@@ -20,7 +20,7 @@
     "today": "Hoje", "yesterday": "Ontem", "this_week": "Esta semana", "earlier": "Anterior"
   },
   "copilot": {
-    "title": "Spendify AI", "subtitle": "Conversacional, baseado nos seus dados.",
+    "title": "Trackify AI", "subtitle": "Conversacional, baseado nos seus dados.",
     "placeholder": "Pergunte qualquer coisa sobre o seu dinheiro…",
     "suggestions": {
       "title": "Experimente perguntar",
@@ -36,7 +36,7 @@
     "support": "Suporte", "about": "Sobre", "version": "Versão"
   },
   "onboarding": {
-    "welcome_title": "Bem-vindo ao Spendify", "welcome_subtitle": "Uma forma mais calma e inteligente de entender seu dinheiro.",
+    "welcome_title": "Bem-vindo ao Trackify", "welcome_subtitle": "Uma forma mais calma e inteligente de entender seu dinheiro.",
     "cta": "Começar", "skip": "Pular"
   },
   "common": { "cancel": "Cancelar", "save": "Salvar", "delete": "Excluir", "continue": "Continuar", "loading": "Carregando…" }

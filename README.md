@@ -1,119 +1,101 @@
-# Spendify
+# Trackify
 
-Your financial life, intelligently designed.
+**Manage your budget with ease.** A premium, AI-native personal-finance app —
+Expo + React Native + TypeScript + NativeWind, with a conversational copilot
+grounded in your real spending, cloud sync via Supabase, and **over-the-air
+updates** so a push to GitHub updates every installed device.
 
-A premium AI-native personal finance app — Expo + React Native + TypeScript + NativeWind, with a conversational **Grok (xAI)** copilot grounded in your real spending.
+Everything lives in **one repo**: the mobile app (`src/`), the database schema
+(`database.sql`), and the optional backend (`server/`).
 
 ## Stack
 
 - **App**: Expo SDK 55, React Native 0.83, React 19, TypeScript
-- **Routing**: Expo Router (file-based, typed routes)
-- **Styling**: NativeWind 4 (Tailwind) with semantic design tokens, light/dark/AMOLED
-- **State**: Zustand + AsyncStorage (offline-first, persisted — runs in Expo Go)
-- **Data**: TanStack Query (used for the live AI insight; ready for Supabase)
-- **UI**: Reanimated 4, expo-blur, lucide icons, FlashList, react-native-svg charts
-- **i18n**: i18next with 8 locales (EN, ES, AR, UR, HI, PT, FR, DE) + RTL
-- **AI**: Grok (xAI) chat API with on-device key + graceful offline fallback
-- **Backend** (optional): Supabase (stubbed, off by default)
+- **Routing**: Expo Router (file-based, typed routes) — lives in `src/app/`
+- **Styling**: NativeWind 4 (Tailwind) with semantic tokens; light/dark/AMOLED
+- **State**: Zustand + AsyncStorage (offline-first, persisted)
+- **Cloud**: Supabase (Postgres + Auth + Realtime) — optional, off until you add keys
+- **AI**: backend proxy (Grok / OpenAI / Gemini) → on-device key → local fallback
+- **OTA**: EAS Update + a GitHub Action that publishes on every push to `main`
+- **i18n**: i18next, 8 locales (EN, ES, AR, UR, HI, PT, FR, DE) + RTL
+
+## Project structure
+
+```
+trackify/
+├── src/                      # ← ALL app code lives here
+│   ├── app/                  # Expo Router screens = your navigation (see note below)
+│   │   ├── _layout.tsx       # Root: providers, theme, onboarding gate, OTA updates
+│   │   ├── (tabs)/           # Dashboard, Budgets, Expenses, Copilot, Settings
+│   │   ├── budget/ expense/  # Add/edit modals
+│   │   ├── analytics.tsx
+│   │   └── onboarding.tsx
+│   ├── components/ui/        # Screen, GlassCard, Aurora, Button, Text, Icon, TextField
+│   ├── features/             # Feature forms (ExpenseForm, BudgetForm)
+│   ├── hooks/                # useTheme, useHaptics, useCurrency, useOTAUpdates
+│   ├── lib/                  # i18n, theme, analytics, constants, storage, query
+│   ├── services/             # supabase.ts (client), ai.ts (copilot)
+│   ├── store/                # Zustand slices: settings, budgets, expenses
+│   └── types/                # Domain types
+├── server/                   # Optional backend (AI proxy) → deploy on Render/Heroku
+├── assets/                   # App icons, splash, brand, favicons
+├── database.sql              # Run this in the Supabase SQL Editor (schema + RLS)
+├── eas.json                  # EAS build/update channels
+├── render.yaml  Procfile     # Backend deploy descriptors
+└── .github/workflows/        # eas-update.yml — OTA publish on push
+```
+
+### Why is there a `src/app/` folder?
+Expo Router is **file-based routing**: every file under `src/app/` automatically
+becomes a screen/route (like Next.js). It's not extra code — it *is* your
+navigation. We keep it inside `src/` so the repo has a single source folder.
 
 ## Quick start
 
 ```bash
-# 1. install
 npm install
-
-# 2. (optional) add your Grok key for full AI — or paste it in-app under Settings
-cp .env.example .env   # then set EXPO_PUBLIC_GROK_API_KEY
-
-# 3. run
-npm run start
-#   press a (Android) / i (iOS, Mac only) / w (web), or scan the QR with Expo Go
+cp .env.example .env     # optional — app runs fully offline with no keys
+npm run start            # press a / i / w, or scan the QR with Expo Go
 ```
 
-> Runs in **Expo Go** — no custom dev build needed. Storage uses AsyncStorage,
-> and every native module here is supported by Expo Go on SDK 55.
+## Over-the-air updates (push to GitHub → live on all devices)
 
-## AI setup (Grok)
+1. Create an Expo account, then run once and **commit** the result:
+   ```bash
+   npx eas-cli@latest login
+   npx eas-cli@latest init
+   npx eas-cli@latest update:configure
+   ```
+   (this writes `extra.eas.projectId` + `updates.url` into `app.json`).
+2. Add an Expo access token to GitHub → **Settings → Secrets → Actions** as
+   `EXPO_TOKEN` (create it at expo.dev → Account → Access tokens).
+3. Build & install the app once per platform: `eas build --profile production`.
+4. From now on, **every push to `main`** runs `.github/workflows/eas-update.yml`,
+   which publishes a new JS bundle that installed apps download on next launch /
+   foreground (see `src/hooks/useOTAUpdates.ts`).
 
-Spendify works with **no key** — it falls back to fast, deterministic on-device
-summaries computed from your data. To enable the conversational copilot and live
-insights:
+> OTA ships **JavaScript & asset** changes. Native changes (new native modules,
+> permissions, app icon) still need a new `eas build`.
 
-1. Get a key from <https://console.x.ai>.
-2. Provide it either way:
-   - **In-app** (easiest): Settings → Spendify AI → paste your `xai-...` key. Stored only on-device.
-   - **.env**: set `EXPO_PUBLIC_GROK_API_KEY` and restart the dev server.
-3. Optional: `EXPO_PUBLIC_GROK_MODEL` (default `grok-3`) and `EXPO_PUBLIC_GROK_BASE_URL`.
+## Supabase (cloud auth + sync)
 
-The client sends a compact, grounded summary of your budgets/expenses so answers
-reflect real numbers. `src/services/ai.ts` is the single integration point.
+1. Create a project at supabase.com.
+2. SQL Editor → paste **`database.sql`** → Run (creates tables + Row Level
+   Security + Realtime).
+3. Settings → API → copy the URL and anon key into `.env`:
+   ```
+   EXPO_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+   ```
+4. Restart `expo start`. The client is in `src/services/supabase.ts` and is
+   `null` until configured, so the app keeps working offline.
 
-> Security: any `EXPO_PUBLIC_` value is bundled into the client. For production,
-> proxy these calls through a server (e.g. a Supabase Edge Function) and keep the
-> key there. The async-iterator interface in `streamAIResponse` makes that swap drop-in.
+## Backend (keeps AI keys off devices)
 
-## Features
-
-- **Dashboard** — balance, budget progress, quick actions, and a live AI insight card.
-- **Budgets** — create/edit/delete budget spaces (monthly, travel, business, event, family) with color + type.
-- **Expenses** — add/edit, search, filter (fixed/variable), date grouping, swipe-to-delete. Adding/removing an expense keeps the linked budget's "spent" in sync.
-- **Analytics** — financial health score (animated SVG ring), 14-day spend trend, by-category breakdown, top merchants.
-- **Copilot** — multi-turn chat with Grok, grounded in your data, with a typing stream.
-- **Settings** — theme (light/dark/AMOLED/system), language (8 + RTL), currency picker, profile name, Grok key.
-
-## Folder structure
-
-```
-spendify/
-├── app/                        # Expo Router screens
-│   ├── _layout.tsx             # Root: providers, theme, onboarding gate, modal routes
-│   ├── onboarding.tsx
-│   ├── analytics.tsx           # Analytics + charts + health score
-│   ├── expense/                # new.tsx + [id].tsx (add/edit modal)
-│   ├── budget/                 # new.tsx + [id].tsx (create/edit modal)
-│   └── (tabs)/                 # Dashboard, Budgets, Expenses, Copilot, Settings
-├── src/
-│   ├── components/ui/          # Screen, GlassCard, Aurora, Button, Text, Icon, TextField
-│   ├── features/               # ExpenseForm, BudgetForm
-│   ├── hooks/                  # useTheme, useHaptics, useCurrency
-│   ├── lib/
-│   │   ├── i18n/               # i18next + 8 locale JSONs
-│   │   ├── theme/              # palette, semantic tokens, spacing/radius
-│   │   ├── analytics.ts        # stats, by-category, trend, financial health score
-│   │   ├── constants.ts        # categories, budget types, currencies
-│   │   ├── id.ts               # uid helper
-│   │   ├── storage.ts          # AsyncStorage + Zustand persist adapter
-│   │   └── query.ts            # TanStack QueryClient
-│   ├── services/
-│   │   ├── supabase.ts         # client stub (uncomment when wiring)
-│   │   └── ai.ts               # Grok client + grounding + offline fallback
-│   ├── store/                  # Zustand slices: settings, budgets, expenses
-│   └── types/                  # Domain types
-└── global.css                  # Tailwind base + CSS variables for theme modes
-```
-
-## Design system
-
-- **Semantic tokens only** — components never reference raw hex; use `bg-bg`, `text-text-muted`, `border-border`, `text-accent-violet`, etc.
-- **Three themes**: `light`, `dark`, `amoled` (true-black for OLED). User can pick or follow system.
-- **Frosted surfaces**: `GlassCard` swaps to a solid surface in AMOLED so OLED stays black.
-- **Aurora backgrounds**: animated blobs driven on the UI thread via Reanimated; auto-disabled in AMOLED.
-- **Typography**: Display = Space Grotesk, Body = Inter, Mono = IBM Plex (font files not yet installed — falls back to system).
-
-## What's offline-first
-
-- All app state lives in AsyncStorage via Zustand `persist` — the app works fully offline.
-- The AI degrades to on-device summaries when no key/network is available.
-- Seed data is provided so screens look populated on first launch.
-
-## What's next
-
-- [ ] OCR receipt scan (expo-camera + a vision model)
-- [ ] Voice expense input
-- [ ] Real Supabase sync + auth
-- [ ] Server-side AI proxy (move the key off-device)
-- [ ] Recurring-payment automation, budget alerts/notifications
-- [ ] EAS build profiles, app icons, splash assets
+See [`server/README.md`](server/README.md). Deploy free on **Render** (uses
+`render.yaml`) or **Heroku** (uses `Procfile`), set your provider key there, then
+put the service URL in `EXPO_PUBLIC_API_URL`. Without it, the app uses an
+on-device key or deterministic local summaries.
 
 ## Scripts
 

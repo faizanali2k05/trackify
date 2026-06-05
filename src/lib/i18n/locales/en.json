@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "Spendify",
+    "name": "Trackify",
     "tagline": "Your financial life, intelligently designed."
   },
   "tabs": {
@@ -93,7 +93,7 @@
     "empty": "Log some expenses to see your breakdown."
   },
   "copilot": {
-    "title": "Spendify AI",
+    "title": "Trackify AI",
     "subtitle": "Conversational, grounded in your data.",
     "placeholder": "Ask anything about your money…",
     "suggestions": {
@@ -124,17 +124,17 @@
     "plan_pro": "Pro",
     "plan_ultra": "Ultra",
     "upgrade_hint": "Upgrade for unlimited AI & OCR",
-    "thanks": "Thanks for supporting Spendify.",
+    "thanks": "Thanks for supporting Trackify.",
     "ai_key": "Grok API key",
     "ai_connected": "Connected",
     "ai_local": "Local mode",
-    "ai_help": "Paste your xAI (Grok) API key to enable conversational AI grounded in your data. Without a key, Spendify uses on-device summaries. Stored only on this device.",
+    "ai_help": "Paste your xAI (Grok) API key to enable conversational AI grounded in your data. Without a key, Trackify uses on-device summaries. Stored only on this device.",
     "support": "Support",
     "about": "About",
     "version": "Version"
   },
   "onboarding": {
-    "welcome_title": "Welcome to Spendify",
+    "welcome_title": "Welcome to Trackify",
     "welcome_subtitle": "A calmer, smarter way to understand your money.",
     "cta": "Get started",
     "skip": "Skip"

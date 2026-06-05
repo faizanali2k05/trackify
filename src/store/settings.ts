@@ -43,7 +43,7 @@ export const useSettingsStore = create<SettingsState>()(
       completeOnboarding: () => set({ hasOnboarded: true }),
     }),
     {
-      name: 'spendify.settings',
+      name: 'trackify.settings',
       storage: createJSONStorage(() => persistStorage),
     },
   ),
